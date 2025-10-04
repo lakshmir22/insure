@@ -287,7 +287,7 @@ export default function UserDashboard() {
                     <Eye className="h-4 w-4 mr-2" />
                     View Details
                   </Button>
-                  <Link href="/dashboard/user/claims/new">
+                  <Link href="/dashboard/user/claims/submit">
                     <Button size="sm" className="bg-[#07a6ec] hover:bg-[#0696d7]">
                       <FileText className="h-4 w-4 mr-2" />
                       File Claim
@@ -365,7 +365,7 @@ export default function UserDashboard() {
                   <p className="text-muted-foreground mb-4">
                     You haven't filed any claims yet.
                   </p>
-                  <Link href="/dashboard/user/claims/new">
+                  <Link href="/dashboard/user/claims/submit">
                     <Button className="bg-[#07a6ec] hover:bg-[#0696d7]">
                       <Plus className="h-4 w-4 mr-2" />
                       File New Claim
@@ -381,7 +381,7 @@ export default function UserDashboard() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>All Claims</CardTitle>
-              <Link href="/dashboard/user/claims/new">
+              <Link href="/dashboard/user/claims/submit">
                 <Button className="bg-[#07a6ec] hover:bg-[#0696d7]">
                   <Plus className="h-4 w-4 mr-2" />
                   New Claim
@@ -426,7 +426,7 @@ export default function UserDashboard() {
                   <p className="text-muted-foreground mb-4">
                     You haven't filed any claims yet.
                   </p>
-                  <Link href="/dashboard/user/claims/new">
+                  <Link href="/dashboard/user/claims/submit">
                     <Button className="bg-[#07a6ec] hover:bg-[#0696d7]">
                       <Plus className="h-4 w-4 mr-2" />
                       File New Claim

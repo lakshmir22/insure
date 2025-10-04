@@ -104,9 +104,9 @@ export default function DashboardSidebar() {
                     Active Claims
                   </Button>
                 </Link>
-                <Link href="/dashboard/user/claims/new">
+                <Link href="/dashboard/user/claims/submit">
                   <Button
-                    variant={isActive("/dashboard/user/claims/new") ? "secondary" : "ghost"}
+                    variant={isActive("/dashboard/user/claims/submit") ? "secondary" : "ghost"}
                     className="w-full justify-start"
                     size="sm"
                   >

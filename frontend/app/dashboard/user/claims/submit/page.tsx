@@ -199,7 +199,7 @@ export default function SubmitClaimPage() {
           title: "Claim Submitted Successfully",
           description: response.data.message
         })
-        router.push('/dashboard/user/claims')
+        router.push('/dashboard/user/claims/success')
       } else {
         throw new Error(response.error)
       }

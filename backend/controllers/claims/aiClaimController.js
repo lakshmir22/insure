@@ -1,6 +1,6 @@
 const { Pool } = require('pg');
 const ABDMService = require('../../services/abdmService');
-const PerplexityService = require('../../services/perplexityService');
+const GroqService = require('../../services/groqService');
 const CashfreePayoutService = require('../../services/cashfreePayoutService');
 const multer = require('multer');
 const path = require('path');
@@ -17,7 +17,7 @@ const pool = new Pool({
 
 // Initialize services
 const abdmService = new ABDMService();
-const perplexityService = new PerplexityService();
+const groqService = new GroqService();
 const cashfreePayoutService = new CashfreePayoutService();
 
 // Configure multer for claim document uploads
@@ -223,14 +223,14 @@ const submitClaim = async (req, res) => {
 
         // Perform AI analysis
         console.log('Starting AI analysis...');
-        const aiResult = await perplexityService.analyzeClaim(claimData);
+        const aiResult = await groqService.analyzeClaim(claimData);
         
         let aiAnalysis = null;
         if (aiResult.success) {
             aiAnalysis = aiResult.data;
         } else {
             console.log('AI analysis failed, using fallback:', aiResult.error);
-            aiAnalysis = perplexityService.getMockAnalysis();
+            aiAnalysis = groqService.getMockAnalysis();
         }
 
         // Update claim with AI analysis
@@ -310,7 +310,7 @@ const getUserClaims = async (req, res) => {
             SELECT c.*, p.policy_number, p.policy_type, p.coverage_amount,
                    pt.policy_type as template_type
             FROM claims c
-            JOIN policies p ON c.policy_id = p.policy_id
+            JOIN policies p ON c.policy_id = p.policy_number
             JOIN policy_templates pt ON p.template_id = pt.template_id
             WHERE c.user_id = $1
             ORDER BY c.filing_date DESC
@@ -344,7 +344,7 @@ const getProviderClaims = async (req, res) => {
                    u.full_name as claimant_name, u.email as claimant_email,
                    pt.policy_type as template_type
             FROM claims c
-            JOIN policies p ON c.policy_id = p.policy_id
+            JOIN policies p ON c.policy_id = p.policy_number
             JOIN policy_templates pt ON p.template_id = pt.template_id
             JOIN users u ON c.user_id = u.user_id
             WHERE p.provider_id = $1
@@ -381,10 +381,10 @@ const processClaim = async (req, res) => {
 
         // Get claim details
         const claimQuery = `
-            SELECT c.*, p.provider_id, p.policy_number, u.full_name as claimant_name,
+            SELECT c.*, p.provider_id, p.policy_id as policies_policy_id, p.policy_number, u.full_name as claimant_name,
                    u.email as claimant_email, u.phone as claimant_phone
             FROM claims c
-            JOIN policies p ON c.policy_id = p.policy_id
+            JOIN policies p ON c.policy_id = p.policy_number
             JOIN users u ON c.user_id = u.user_id
             WHERE c.claim_id = $1 AND p.provider_id = $2
         `;
@@ -442,17 +442,15 @@ const processClaim = async (req, res) => {
                 // Create payment record
                 await client.query(`
                     INSERT INTO policy_payments (
-                        policy_id, user_id, amount, payment_type, 
-                        status, cashfree_order_id, cashfree_txn_id
-                    ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+                        policy_id, amount, payment_type, 
+                        status, payment_reference, payment_date
+                    ) VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)
                 `, [
-                    claim.policy_id,
-                    claim.user_id,
+                    claim.policies_policy_id,
                     claim.claim_amount,
                     'claim_payout',
                     'completed',
-                    payoutResult.data.payoutId,
-                    payoutResult.data.utr
+                    payoutResult.data.payoutId
                 ]);
             }
 
@@ -532,7 +530,7 @@ const getClaimDetails = async (req, res) => {
                    u.full_name as claimant_name, u.email as claimant_email,
                    pt.policy_type as template_type
             FROM claims c
-            JOIN policies p ON c.policy_id = p.policy_id
+            JOIN policies p ON c.policy_id = p.policy_number
             JOIN policy_templates pt ON p.template_id = pt.template_id
             JOIN users u ON c.user_id = u.user_id
             WHERE c.claim_id = $1 AND (c.user_id = $2 OR p.provider_id = $2)

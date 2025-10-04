@@ -28,7 +28,7 @@ const menuItems = [
     icon: FileText,
     submenu: [
       { title: "Active Claims", href: "/dashboard/user/claims" },
-      { title: "File New Claim", href: "/dashboard/user/claims/new" },
+      { title: "File New Claim", href: "/dashboard/user/claims/submit" },
       { title: "Claim History", href: "/dashboard/user/claims/history" },
     ]
   },

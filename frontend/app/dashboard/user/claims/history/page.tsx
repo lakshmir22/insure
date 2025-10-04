@@ -91,7 +91,7 @@ export default function ClaimsHistoryPage() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mt-2">
           <h1 className="text-3xl font-bold">All Claims</h1>
           <Button 
-            onClick={() => router.push('/dashboard/user/claims/new')}
+            onClick={() => router.push('/dashboard/user/claims/submit')}
             className="bg-[#fa6724] hover:bg-[#e55613] mt-4 md:mt-0"
           >
             File a New Claim
@@ -146,7 +146,7 @@ export default function ClaimsHistoryPage() {
             </p>
             {!searchTerm && (
               <Button 
-                onClick={() => router.push('/dashboard/user/claims/new')}
+                onClick={() => router.push('/dashboard/user/claims/submit')}
                 className="bg-[#fa6724] hover:bg-[#e55613]"
               >
                 File a New Claim
