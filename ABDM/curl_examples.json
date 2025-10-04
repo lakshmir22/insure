@@ -1,0 +1,138 @@
+{
+  "api_examples": {
+    "base_url": "http://localhost:5000/api/v1",
+    "requests": [
+      {
+        "name": "Get Health Records with Aadhaar",
+        "description": "Retrieve health records using 12-digit Aadhaar number",
+        "curl_command": "curl -X GET 'http://localhost:5000/api/v1/health-records?identifier=123456789012'",
+        "example_response": {
+          "status": "success",
+          "message": "Health records retrieved successfully",
+          "data": {
+            "patient_info": {
+              "name": "Aarav Sharma",
+              "identifier": "123456789012",
+              "identifier_type": "Aadhaar",
+              "age": 45,
+              "gender": "Male",
+              "blood_group": "B+",
+              "marital_status": "Married",
+              "occupation": "Service",
+              "address": {
+                "city": "Mumbai",
+                "state": "Maharashtra",
+                "pincode": "400001"
+              }
+            },
+            "medical_history": {
+              "chronic_conditions": [
+                "Type 2 Diabetes Mellitus",
+                "Essential Hypertension"
+              ],
+              "allergies": ["Penicillin"],
+              "family_history": [
+                "Father - Diabetes",
+                "Mother - Hypertension"
+              ],
+              "surgeries": [
+                {
+                  "procedure": "Laparoscopic Cholecystectomy",
+                  "date": "2023-06-15",
+                  "hospital": "Fortis Memorial Research Institute",
+                  "surgeon": "Dr. Gupta"
+                }
+              ]
+            },
+            "recent_visits": [
+              {
+                "date": "2024-02-15",
+                "hospital": "Apollo Hospitals, Chennai",
+                "department": "Endocrinology",
+                "doctor": "Dr. Patel",
+                "diagnosis": "Type 2 Diabetes Mellitus",
+                "prescribed_medications": [
+                  "Metformin 500mg BD",
+                  "Glimepiride 1mg OD"
+                ],
+                "follow_up_date": "2024-03-15"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "name": "Get Health Records with ABHA",
+        "description": "Retrieve health records using 14-character ABHA number",
+        "curl_command": "curl -X GET 'http://localhost:5000/api/v1/health-records?identifier=ABHA12345678901'",
+        "example_response": {
+          "status": "success",
+          "message": "Health records retrieved successfully",
+          "data": {
+            "patient_info": {
+              "name": "Prisha Malhotra",
+              "identifier": "ABHA12345678901",
+              "identifier_type": "ABHA",
+              "age": 35,
+              "gender": "Female",
+              "blood_group": "O+",
+              "marital_status": "Married",
+              "occupation": "Healthcare",
+              "address": {
+                "city": "Bangalore",
+                "state": "Karnataka",
+                "pincode": "560001"
+              }
+            },
+            "medical_history": {
+              "chronic_conditions": [
+                "Hypothyroidism"
+              ],
+              "allergies": ["Dust", "Pollen"],
+              "family_history": [
+                "Mother - Thyroid Disease"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "name": "Invalid Identifier Format",
+        "description": "Example of error response for invalid identifier",
+        "curl_command": "curl -X GET 'http://localhost:5000/api/v1/health-records?identifier=123'",
+        "example_response": {
+          "error": "Invalid identifier format",
+          "message": "Please provide valid Aadhaar (12 digits) or ABHA number (14 alphanumeric characters)"
+        }
+      },
+      {
+        "name": "Missing Identifier",
+        "description": "Example of error response for missing identifier",
+        "curl_command": "curl -X GET 'http://localhost:5000/api/v1/health-records'",
+        "example_response": {
+          "error": "Missing identifier parameter",
+          "message": "Please provide either Aadhaar or ABHA number as identifier"
+        }
+      }
+    ],
+    "usage_notes": {
+      "windows_curl": "For Windows PowerShell, replace single quotes with double quotes",
+      "response_format": "All responses are in JSON format",
+      "content_type": "Application/json",
+      "authentication": "No authentication required for demo purposes",
+      "rate_limiting": "No rate limiting implemented in demo version"
+    },
+    "testing_identifiers": {
+      "valid_aadhaar": [
+        "123456789012",
+        "987654321098",
+        "456789123456"
+      ],
+      "valid_abha": [
+        "ABHA12345678901",
+        "ABHA98765432109",
+        "ABHA45678912345"
+      ]
+    }
+  }
+} 
